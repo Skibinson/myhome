@@ -13,7 +13,6 @@ void loop()
     {
         Serial.println("Connection lost. Reconnecting...");
         connectToWifi();
-
     }
     delay(5000);
 }
