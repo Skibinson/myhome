@@ -5,10 +5,18 @@
 
 class WifiManager {
 private:
-    const char* WIFI_SSID = WIFI_SSID;
-    const char* WIFI_PASSWORD = WIFI_PASSWORD;
+    const char* WIFI_SSID;
+    const char* WIFI_PASSWORD;
 
-    bool is_conected;
+    int status = WL_IDLE_STATUS;  // Empty 
+public:
+    WifiManager(const char* _ssid, const char* _pwd);
+    void connect();
+    bool getStatus();
+    String getLocalIP();
+    int getRSSI();      // returns strength 
+    void printStatus();
+    void disconnect();
 
 };
 
