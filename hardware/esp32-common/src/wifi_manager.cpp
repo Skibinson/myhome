@@ -27,7 +27,7 @@ void WifiManager::connect()
     }
 }
 
-bool WifiManager::getStatus()
+bool WifiManager::isConnected()
 {
     return status;
 }
@@ -40,7 +40,7 @@ String WifiManager::getLocalIP()
     }
     else if (status == WL_CONNECTED)
     {
-        return WiFi.localIP.toString();
+        return WiFi.localIP().toString();
     }
 }
 
@@ -66,6 +66,8 @@ void WifiManager::printStatus()
     if(status != WL_CONNECTED)
     {
         Serial.println("You are not connected to network.");
+        Serial.print("Statuscode: ");
+        Serial.println(status);
     }
     else if (status == WL_CONNECTED)
     {
@@ -74,7 +76,8 @@ void WifiManager::printStatus()
         Serial.print("IP address: ");
         Serial.println(getLocalIP());
         Serial.print("Signal level: ");
-        Serial.println(getRSSI());
+        Serial.print(getRSSI());
+        Serial.println("dBm");
     }
 
 }

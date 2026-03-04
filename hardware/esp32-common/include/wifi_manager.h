@@ -1,6 +1,7 @@
 #ifndef WIFI_MANAGER_H
 #define WIFI_MANAGER_H
 #include <WiFi.h>
+#include Arduino.h
 #include "wifi_config.h"
 
 class WifiManager {
@@ -12,7 +13,7 @@ private:
 public:
     WifiManager(const char* _ssid, const char* _pwd);
     void connect();
-    bool getStatus();
+    int isConnected();
     String getLocalIP();
     int getRSSI();      // returns strength 
     void printStatus();
