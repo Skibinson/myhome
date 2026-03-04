@@ -2,7 +2,6 @@
 #define WIFI_MANAGER_H
 #include <WiFi.h>
 #include Arduino.h
-#include "wifi_config.h"
 
 class WifiManager {
 private:

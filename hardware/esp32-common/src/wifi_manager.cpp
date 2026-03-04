@@ -1,4 +1,5 @@
 #include "wifi_manager.h"
+#include <Arduino.h>
 
 WifiManager::WifiManager(const char* _ssid, const char* _pwd)
 {
