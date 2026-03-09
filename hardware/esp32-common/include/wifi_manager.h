@@ -1,7 +1,7 @@
 #ifndef WIFI_MANAGER_H
 #define WIFI_MANAGER_H
 #include <WiFi.h>
-#include Arduino.h
+#include <Arduino.h>
 
 class WifiManager {
 private:
@@ -17,6 +17,7 @@ public:
     int getRSSI();      // returns strength 
     void printStatus();
     void disconnect();
+    int getStatusCode();
 
 };
 

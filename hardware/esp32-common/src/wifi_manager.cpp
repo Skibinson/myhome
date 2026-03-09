@@ -10,13 +10,14 @@ WifiManager::WifiManager(const char* _ssid, const char* _pwd)
 void WifiManager::connect()
 {
     int attempts = 0;
-    Serial.print("Attempting to connect to network, SSID: ")
+    Serial.print("Attempting to connect to network, SSID: ");
     Serial.println(WIFI_SSID);
     while (status != WL_CONNECTED && attempts < 10)
     {
         attempts++;
-        status = WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+        WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
         delay(3000);                                    // delay between attempts 3 sec
+        status = WiFi.status();
     }
     if (status == WL_CONNECTED)
     {
@@ -30,19 +31,22 @@ void WifiManager::connect()
 
 bool WifiManager::isConnected()
 {
-    return status;
+    status = WiFi.status();
+    if (status == WL_CONNECTED)
+    {
+        return true;
+    }
+
+    return false;
 }
 
 String WifiManager::getLocalIP()
 {
-    if (status != WL_CONNECTED)
-    {
-        return "Not connected";
-    }
-    else if (status == WL_CONNECTED)
+    if (status == WL_CONNECTED)
     {
         return WiFi.localIP().toString();
     }
+    return "Not connected";
 }
 
 int WifiManager::getRSSI()
@@ -51,10 +55,7 @@ int WifiManager::getRSSI()
     {
         return WiFi.RSSI();
     }
-    else
-    {
-        return 0;
-    }
+    return 0; 
 }
 
 void WifiManager::disconnect()
@@ -81,4 +82,8 @@ void WifiManager::printStatus()
         Serial.println("dBm");
     }
 
+}
+
+int WifiManager::getStatusCode() {
+    return WiFi.status();  // возвращает реальный статус
 }
