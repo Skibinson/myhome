@@ -1,42 +1,90 @@
-#include <WiFi.h>
-#include <wifi_config.h>
-#include <wifi_manager.h>
+#include "wifi_manager.h"
+#include <Arduino.h>
 
-void setup()
+WifiManager::WifiManager(const char* _ssid, const char* _pwd)
 {
-    connectToWifi();
+    WIFI_SSID = _ssid;
+    WIFI_PASSWORD = _pwd;
 }
 
-void loop()
+void WifiManager::connect()
 {
-    if (WiFi.status() != WL_CONNECTED)
-    {
-        Serial.println("Connection lost. Reconnecting...");
-        connectToWifi();
-    }
-    delay(5000);
-}
-
-void connectToWifi()
-{
-    Serial.print("Connecting to WiFi");
-    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-
     int attempts = 0;
-    while (WiFi.status() != WL_CONNECTED && attempts < 20)
+    Serial.print("Attempting to connect to network, SSID: ");
+    Serial.println(WIFI_SSID);
+    while (status != WL_CONNECTED && attempts < 10)
     {
-        delay(500);
-        Serial.println(".");
         attempts++;
+        WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+        delay(3000);                                    // delay between attempts 3 sec
+        status = WiFi.status();
     }
-
-    if (WiFi.status() == WL_CONNECTED)
+    if (status == WL_CONNECTED)
     {
-        Serial.println("\n Connected! IP: " + WiFi.localIP().toString());
-
-    } else {
-        Serial.println("\nFailed to connect.");
+        Serial.println("You are connected to the network.");
+    }
+    else if (status == WL_CONNECT_FAILED)
+    {
+        Serial.println("Couldn't connect to network.");
     }
 }
 
 
+bool WifiManager::isConnected()
+{
+    status = WiFi.status();
+    if (status == WL_CONNECTED)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+String WifiManager::getLocalIP()
+{
+    if (status == WL_CONNECTED)
+    {
+        return WiFi.localIP().toString();
+    }
+    return "Not connected";
+}
+
+int WifiManager::getRSSI()
+{
+    if (status == WL_CONNECTED)
+    {
+        return WiFi.RSSI();
+    }
+    return 0; 
+}
+
+void WifiManager::disconnect()
+{
+    WiFi.disconnect();
+}
+
+void WifiManager::printStatus()
+{
+    if(status != WL_CONNECTED)
+    {
+        Serial.println("You are not connected to network.");
+        Serial.print("Statuscode: ");
+        Serial.println(status);
+    }
+    else if (status == WL_CONNECTED)
+    {
+        Serial.print("You are connected to network. SSID: ");
+        Serial.println(WIFI_SSID);
+        Serial.print("IP address: ");
+        Serial.println(getLocalIP());
+        Serial.print("Signal level: ");
+        Serial.print(getRSSI());
+        Serial.println("dBm");
+    }
+
+}
+
+int WifiManager::getStatusCode() {
+    return WiFi.status();  // возвращает реальный статус
+}
