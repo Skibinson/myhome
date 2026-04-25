@@ -3,7 +3,8 @@
 
 void tempSensor::begin()
 {
-    Serial.println("[MOCK] add temperature sensor.");
+    device = "AHT_20";
+    
 }
 
 float tempSensor::read()
